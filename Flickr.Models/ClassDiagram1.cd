@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Flickr.Models.Models.Item">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAQAAAAAAAIAAAAIgAAAAAAAAIAABABAAAAEA=</HashCode>
+      <FileName>Models\Item.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Flickr.Models.Models.Media">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>Models\Media.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Flickr.Models.Models.Root">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAQAAAEAAAIAgAAAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>Models\Root.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Flickr.Models.Models.SearchOptions">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAAAAAAAEEABAAAAAAAAAA=</HashCode>
+      <FileName>Models\SearchOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FlickrStream.Models.Language">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAQAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>Models\Language.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="FlickrStream.Models.LanguageName">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACYAAAAAAAAQAAIAAAABAAAAAAQAAAAAAAAAEA=</HashCode>
+      <FileName>Models\LanguageName.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

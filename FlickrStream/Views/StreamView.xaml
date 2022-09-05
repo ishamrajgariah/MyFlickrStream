@@ -1,0 +1,167 @@
+﻿<UserControl x:Class="FlickrStream.Views.StreamView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FlickrStream.Views"
+             xmlns:resx="clr-namespace:FlickrStream.Properties"
+              xmlns:converters="clr-namespace:FlickrStream.ControLibrary.Converters;assembly=FlickrStream.Styles"
+              xmlns:customControls="clr-namespace:FlickrStream.ControLibrary.CustomControls;assembly=FlickrStream.Styles"
+              mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" Background="Transparent">
+    <UserControl.Resources>
+        <converters:InvertedBooleanConverter x:Key="InvertedBooleanConverter"></converters:InvertedBooleanConverter>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></converters:BooleanToVisibilityConverter>
+        <converters:BooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" IsInverted="True"></converters:BooleanToVisibilityConverter>
+        <converters:StringToUriConverter x:Key="StringToUriConverter" ></converters:StringToUriConverter>
+        <converters:DateToTimeAgoConverter x:Key="DateToTimeAgoConverter"></converters:DateToTimeAgoConverter>
+    </UserControl.Resources>
+    <Grid Background="Transparent" VerticalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid Background="{StaticResource Background}" Grid.Row="0" HorizontalAlignment="Stretch"  >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBox Margin="8" Grid.Column="0" x:Name="TagSearchTextBox" 
+                     Style="{StaticResource SearchTextBox}" 
+                     Height="20"  MinWidth="200" 
+                     HorizontalAlignment="Stretch" 
+                     Text="{Binding Path=Tags, UpdateSourceTrigger=PropertyChanged}" >
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
+                </TextBox.InputBindings>
+            </TextBox>
+            <Button Margin="8" Grid.Column="1" 
+                    VerticalAlignment="Center" HorizontalAlignment="Right"
+                     Command="{Binding SearchCommand}">
+                <Button.ContentTemplate>
+                <ItemContainerTemplate>
+                    <Image  Source="/ResourceImages/search.png" Width="30" Height="30" />
+                </ItemContainerTemplate>
+                </Button.ContentTemplate>
+            </Button>
+            <Button Margin="8" Grid.Column="2" 
+                    VerticalAlignment="Center" HorizontalAlignment="Right"
+                    Command="{Binding ClearCommand}">
+                <Button.ContentTemplate>
+                    <ItemContainerTemplate>
+                        <Image  Source="/ResourceImages/clear.png" Width="30" Height="30" />
+                    </ItemContainerTemplate>
+                </Button.ContentTemplate>
+            </Button>
+        </Grid>
+        
+        <Expander Grid.Row="1" HorizontalAlignment="Stretch"
+                  Background="{StaticResource Background}" >
+            <Expander.Style>
+                <Style TargetType="Expander" BasedOn="{StaticResource StandardExpander}">
+                    <Setter Property="IsExpanded" Value="False" />
+                    <Setter Property="Header" Value="{x:Static resx:Resources.ExpanderHeaderCollapsed}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsExpanded,RelativeSource={RelativeSource Self}}"                                 Value="True">
+                            <Setter Property="Header" Value="{x:Static resx:Resources.ExpanderHeaderExpanded}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Expander.Style>
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Margin="8" x:Name="TagModeTextBlock" Text="{x:Static resx:Resources.TagMode}" Grid.Row="0" Grid.Column="0"  ></TextBlock>
+                <StackPanel Margin="8" Grid.Row="0" Grid.Column="1" Orientation="Horizontal"  >
+                    <RadioButton x:Name="TagModeAnyRadioButton" IsChecked="{Binding IsTagModeAllEnabled, Converter={StaticResource InvertedBooleanConverter}}" ></RadioButton>
+                    <TextBlock x:Name="AnyTextBlock" Text="{x:Static resx:Resources.AnyText}" ></TextBlock>
+                </StackPanel>
+                <StackPanel Margin="8" Grid.Row="0" Grid.Column="2" Orientation="Horizontal" >
+                    <RadioButton x:Name="TagModeAllRadioButton" IsChecked="{Binding IsTagModeAllEnabled}" Grid.Row="0" Grid.Column="2"></RadioButton>
+                    <TextBlock x:Name="AllTextBlock" Text="{x:Static resx:Resources.AllText}" ></TextBlock>
+                </StackPanel>
+
+                <StackPanel Margin="8" Grid.Column="0" Grid.Row="1" Orientation="Horizontal" >
+                    <CheckBox x:Name="IncludeUserIdInSearchStringCheckBox"  IsChecked="{Binding IncludeUserIdInSearchString}"></CheckBox>
+                    <TextBlock x:Name="IncludeUserIdInSearchStringTextBlock" Text="{x:Static resx:Resources.IncludeUserIDs}" ></TextBlock>
+                </StackPanel>
+                <TextBox HorizontalAlignment="Left" Style="{StaticResource SearchTextBox}" x:Name="UserIdTextBox" Width="200" IsEnabled="{Binding IncludeUserIdInSearchString}"
+                                           Text="{Binding UserIDsToSearch}" Grid.Row="1"
+                                           Grid.Column="1" Grid.ColumnSpan="2" Margin="8" />
+
+                <StackPanel Margin="8" Grid.Row="2" Grid.Column="0" Orientation="Horizontal" >
+                    <CheckBox x:Name="IncludeLanguageInSearchStringCheckBox"  IsChecked="{Binding IncludeLanguageInSearchString}"></CheckBox>
+                    <TextBlock x:Name="IncludeLanguageInSearchStringTextBlock" Text="{x:Static resx:Resources.IncludeLanguage}" ></TextBlock>
+                </StackPanel>
+                <ComboBox Grid.Row="2" Grid.Column="1" x:Name="LanguageListComboBox" IsEnabled="{Binding IncludeLanguageInSearchString}"
+                          ItemsSource="{Binding LanguageList}" 
+                          SelectedItem="{Binding SelectedLanguage}" Margin="8"  ></ComboBox>
+            </Grid>
+
+        </Expander>
+        
+        <Grid Background="{StaticResource LightBackground}" Grid.Row="2" x:Name="ItemStack" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <ItemsControl x:Name="ImageList" ItemsSource="{Binding Path=Photos}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid x:Name="ImageItemGrid">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="{Binding Path=Height, ElementName=ImageItem}"></RowDefinition>
+                            </Grid.RowDefinitions>
+                                <Image x:Name="ImageItem" Grid.Row="0" Stretch="None"
+                                        Margin="8" >
+                                    <Image.Source>
+                                        <BitmapImage UriSource="{Binding media.m, Converter={StaticResource StringToUriConverter}, Mode=OneWay}"></BitmapImage>
+                                    </Image.Source>
+                                </Image>
+                                <TextBlock Margin="8" Grid.Row="0" x:Name="DescriptionTextBlock" 
+                                           HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                                           Foreground="White" Background="{StaticResource BackgroundHighlighted}" 
+                                           Panel.ZIndex="10"
+                                           Text="{Binding published, Converter={StaticResource DateToTimeAgoConverter}}"></TextBlock>
+                            </Grid>
+                       <DataTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True" SourceName="ImageItemGrid">
+                                <Setter Property="TextBlock.Visibility" TargetName="DescriptionTextBlock" Value="Visible"></Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="False" SourceName="ImageItemGrid">
+                                <Setter Property="TextBlock.Visibility" TargetName="DescriptionTextBlock" Value="Collapsed"></Setter>
+                            </Trigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.Template>
+                    <ControlTemplate TargetType="{x:Type ItemsControl}">
+                        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <TextBlock Margin="5,2" Width="{TemplateBinding Width}" HorizontalAlignment="Center"
+                                       Text="{x:Static resx:Resources.NoImagesToDisplay}"
+                                       Visibility="{TemplateBinding HasItems, Converter={StaticResource InvertedBooleanToVisibilityConverter}}"
+                                       Foreground="LightGray" FontStyle="Italic"/>
+                            <ItemsPresenter Margin="2,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </ItemsControl.Template>
+            </ItemsControl>
+            </ScrollViewer>
+            <customControls:BusyIndicator HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"></customControls:BusyIndicator>
+        </Grid>
+    </Grid>
+</UserControl>
